@@ -36,8 +36,6 @@ end
 function main()
     repeat wait(0) until isSampAvailable()
 
-    sampAddChatMessage("[HUD] Скрипт запущен.111", 0x00FF00)
-
     while true do
         wait(0)
 
@@ -76,7 +74,7 @@ local function processText(id, text)
                 targetId = playerId
 
                 sampAddChatMessage(
-                    "[HUD] Найдена цель: " .. targetName .. " [" .. targetId .. "]",
+                    "{00FFFF}District Tracker | {98FB98}  Найдена цель: " .. targetName .. " [" .. targetId .. "]",
                     0x00FF00
                 )
             end
@@ -97,7 +95,7 @@ local function processText(id, text)
 
                     placeWaypoint(x, y)
 
-                    sampAddChatMessage("[HUD] Район цели: " .. name, 0x00FF00)
+                    sampAddChatMessage("{00FFFF}District Tracker | {98FB98}  Район цели: " .. name, 0x00FF00)
                     return
                 end
 
