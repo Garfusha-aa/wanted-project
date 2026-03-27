@@ -3,8 +3,8 @@ script_author("Garfusha")
 
 local SCRIPT_VERSION = "1.0"
 
-local UPDATE_URL = "ССЫЛКА_НА_СКРИПТ"
-local VERSION_URL = "ССЫЛКА_НА_ВЕРСИЮ"
+local UPDATE_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/refs/heads/main/wanted.lua"
+local VERSION_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/refs/heads/main/version.txt"
 
 local dlstatus = require('moonloader').download_status
 
