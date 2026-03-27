@@ -17,8 +17,8 @@ local zones = zones or {
 
 local renderFont = renderCreateFont("Arial", 10, 5)
 
-local targetZone = "РќРµС‚ С†РµР»Рё"
-local targetName = "РќРµРёР·РІРµСЃС‚РЅРѕ"
+local targetZone = "Нет цели"
+local targetName = "Неизвестно"
 local targetId = "?"
 
 local waypointX, waypointY = nil, nil
@@ -36,7 +36,7 @@ end
 function main()
     repeat wait(0) until isSampAvailable()
 
-    sampAddChatMessage("[HUD] РЎРєСЂРёРїС‚ Р·Р°РїСѓС‰РµРЅ.", 0x00FF00)
+    sampAddChatMessage("[HUD] Скрипт запущен.111", 0x00FF00)
 
     while true do
         wait(0)
@@ -48,14 +48,14 @@ function main()
             local dist = getDistance(px, py, waypointX, waypointY)
 
             text = string.format(
-                "Р¦РµР»СЊ: %s [%s]\nР Р°Р№РѕРЅ: %s\nР”РёСЃС‚Р°РЅС†РёСЏ: %.0f Рј",
+                "Цель: %s [%s]\nРайон: %s\nДистанция: %.0f м",
                 targetName,
                 targetId,
                 targetZone,
                 dist
             )
         else
-            text = "Р¦РµР»СЊ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅР°"
+            text = "Цель не установлена"
         end
 
         renderFontDrawText(renderFont, text, 20, 300, 0xFFFFFFFF)
@@ -76,7 +76,7 @@ local function processText(id, text)
                 targetId = playerId
 
                 sampAddChatMessage(
-                    "[HUD] РќР°Р№РґРµРЅР° С†РµР»СЊ: " .. targetName .. " [" .. targetId .. "]",
+                    "[HUD] Найдена цель: " .. targetName .. " [" .. targetId .. "]",
                     0x00FF00
                 )
             end
@@ -97,7 +97,7 @@ local function processText(id, text)
 
                     placeWaypoint(x, y)
 
-                    sampAddChatMessage("[HUD] Р Р°Р№РѕРЅ С†РµР»Рё: " .. name, 0x00FF00)
+                    sampAddChatMessage("[HUD] Район цели: " .. name, 0x00FF00)
                     return
                 end
 
