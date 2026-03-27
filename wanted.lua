@@ -1,11 +1,11 @@
 script_name("District Tracker")
-script_author("Garfusha")
+script_author("Garfusha1")
 
 local sampev = require "samp.events"
 local http = require("ssl.https")
 local ltn12 = require("ltn12")
 
-local SCRIPT_VERSION = "2.0"
+local SCRIPT_VERSION = "3.0"
 
 local UPDATE_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/wanted.lua"
 local VERSION_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/version.txt"
