@@ -5,15 +5,15 @@ local sampev = require "samp.events"
 local http = require("ssl.https")
 local ltn12 = require("ltn12")
 
-local SCRIPT_VERSION = "1.0.0"
+local SCRIPT_VERSION = "2.0"
 
 local UPDATE_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/wanted.lua"
 local VERSION_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/version.txt"
 
--- ================= АВТООБНОВА =================
+-- ================= ГЂГ‚Г’ГЋГЋГЃГЌГЋГ‚ГЂ =================
 
 function checkUpdate()
-    sampAddChatMessage("[DT] Проверка обновления...", -1)
+    sampAddChatMessage("[DT] ГЏГ°Г®ГўГҐГ°ГЄГ  Г®ГЎГ­Г®ГўГ«ГҐГ­ГЁГї...", -1)
 
     local versionData = {}
     local _, code = http.request{
@@ -22,7 +22,7 @@ function checkUpdate()
     }
 
     if code ~= 200 then
-        sampAddChatMessage("[DT] Ошибка проверки версии: "..tostring(code), -1)
+        sampAddChatMessage("[DT] ГЋГёГЁГЎГЄГ  ГЇГ°Г®ГўГҐГ°ГЄГЁ ГўГҐГ°Г±ГЁГЁ: "..tostring(code), -1)
         return
     end
 
@@ -32,15 +32,15 @@ function checkUpdate()
     sampAddChatMessage("[DT] local: "..SCRIPT_VERSION, -1)
 
     if new_version ~= SCRIPT_VERSION then
-        sampAddChatMessage("[DT] Найдена обнова!", 0x00FF00)
+        sampAddChatMessage("[DT] ГЌГ Г©Г¤ГҐГ­Г  Г®ГЎГ­Г®ГўГ !", 0x00FF00)
         updateScript()
     else
-        sampAddChatMessage("[DT] Обновление не требуется", -1)
+        sampAddChatMessage("[DT] ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г­ГҐ ГІГ°ГҐГЎГіГҐГІГ±Гї", -1)
     end
 end
 
 function updateScript()
-    sampAddChatMessage("[DT] Скачивание обновы...", -1)
+    sampAddChatMessage("[DT] Г‘ГЄГ Г·ГЁГўГ Г­ГЁГҐ Г®ГЎГ­Г®ГўГ»...", -1)
 
     local script_path = thisScript().path
     local data = {}
@@ -51,7 +51,7 @@ function updateScript()
     }
 
     if code ~= 200 then
-        sampAddChatMessage("[DT] HTTP ошибка: "..tostring(code), -1)
+        sampAddChatMessage("[DT] HTTP Г®ГёГЁГЎГЄГ : "..tostring(code), -1)
         return
     end
 
@@ -59,20 +59,20 @@ function updateScript()
 
     local file = io.open(script_path, "wb")
     if not file then
-        sampAddChatMessage("[DT] Не удалось создать файл", -1)
+        sampAddChatMessage("[DT] ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г±Г®Г§Г¤Г ГІГј ГґГ Г©Г«", -1)
         return
     end
 
     file:write(content)
     file:close()
 
-    sampAddChatMessage("[DT] Обновлено! Перезагрузка...", 0x00FF00)
+    sampAddChatMessage("[DT] ГЋГЎГ­Г®ГўГ«ГҐГ­Г®! ГЏГҐГ°ГҐГ§Г ГЈГ°ГіГ§ГЄГ ...", 0x00FF00)
 
     wait(500)
     thisScript():reload()
 end
 
--- ================= ТВОЙ КОД =================
+-- ================= Г’Г‚ГЋГ‰ ГЉГЋГ„ =================
 
 local allowedTextDraws = {
     [2110] = true,
@@ -80,13 +80,13 @@ local allowedTextDraws = {
 }
 
 local zones = zones or {
-    -- (оставил как у тебя, не трогал)
+    -- (Г®Г±ГІГ ГўГЁГ« ГЄГ ГЄ Гі ГІГҐГЎГї, Г­ГҐ ГІГ°Г®ГЈГ Г«)
 }
 
 local renderFont = renderCreateFont("Arial", 10, 5)
 
-local targetZone = "Нет цели"
-local targetName = "Неизвестно"
+local targetZone = "ГЌГҐГІ Г¶ГҐГ«ГЁ"
+local targetName = "ГЌГҐГЁГ§ГўГҐГ±ГІГ­Г®"
 local targetId = "?"
 
 local waypointX, waypointY = nil, nil
@@ -104,9 +104,9 @@ end
 function main()
     repeat wait(0) until isSampAvailable()
 
-    sampAddChatMessage("[HUD] Скрипт запущен.", 0x00FF00)
+    sampAddChatMessage("[HUD] Г‘ГЄГ°ГЁГЇГІ Г§Г ГЇГіГ№ГҐГ­.", 0x00FF00)
 
-    -- ?? запуск автообновы
+    -- ?? Г§Г ГЇГіГ±ГЄ Г ГўГІГ®Г®ГЎГ­Г®ГўГ»
     lua_thread.create(function()
         wait(3000)
         checkUpdate()
@@ -122,14 +122,14 @@ function main()
             local dist = getDistance(px, py, waypointX, waypointY)
 
             text = string.format(
-                "Цель: %s [%s]\nРайон: %s\nДистанция: %.0f м",
+                "Г–ГҐГ«Гј: %s [%s]\nГђГ Г©Г®Г­: %s\nГ„ГЁГ±ГІГ Г­Г¶ГЁГї: %.0f Г¬",
                 targetName,
                 targetId,
                 targetZone,
                 dist
             )
         else
-            text = "Цель не установлена"
+            text = "Г–ГҐГ«Гј Г­ГҐ ГіГ±ГІГ Г­Г®ГўГ«ГҐГ­Г "
         end
 
         renderFontDrawText(renderFont, text, 20, 300, 0xFFFFFFFF)
@@ -150,7 +150,7 @@ local function processText(id, text)
                 targetId = playerId
 
                 sampAddChatMessage(
-                    "[HUD] Найдена цель: " .. targetName .. " [" .. targetId .. "]",
+                    "[HUD] ГЌГ Г©Г¤ГҐГ­Г  Г¶ГҐГ«Гј: " .. targetName .. " [" .. targetId .. "]",
                     0x00FF00
                 )
             end
@@ -171,7 +171,7 @@ local function processText(id, text)
 
                     placeWaypoint(x, y)
 
-                    sampAddChatMessage("[HUD] Район цели: " .. name, 0x00FF00)
+                    sampAddChatMessage("[HUD] ГђГ Г©Г®Г­ Г¶ГҐГ«ГЁ: " .. name, 0x00FF00)
                     return
                 end
 
