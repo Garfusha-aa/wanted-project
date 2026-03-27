@@ -388,7 +388,7 @@ local zones = zones or {
     {"Los Santos", 44.615, -2892.970, -242.990, 2997.060, -768.027, 900.000}
 }
 
-local renderFont = renderCreateFont("Arial", 10, 5)
+local renderFont = renderCreateFont("Arial", 20, 10)
 
 local targetZone = "Нет цели"
 local targetName = "Неизвестно"
