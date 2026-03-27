@@ -1,78 +1,7 @@
-script_name("District Tracker")
-script_author("Garfusha1")
+script_name("District Tracker HUD")
+script_author("Garfusha")
 
 local sampev = require "samp.events"
-local http = require("ssl.https")
-local ltn12 = require("ltn12")
-
-local SCRIPT_VERSION = "3.0"
-
-local UPDATE_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/wanted.lua"
-local VERSION_URL = "https://raw.githubusercontent.com/Garfusha-aa/wanted-project/main/version.txt"
-
--- ================= ÀÂÒÎÎÁÍÎÂÀ =================
-
-function checkUpdate()
-    sampAddChatMessage("[DT] Ïðîâåðêà îáíîâëåíèÿ...", -1)
-
-    local versionData = {}
-    local _, code = http.request{
-        url = VERSION_URL,
-        sink = ltn12.sink.table(versionData)
-    }
-
-    if code ~= 200 then
-        sampAddChatMessage("[DT] Îøèáêà ïðîâåðêè âåðñèè: "..tostring(code), -1)
-        return
-    end
-
-    local new_version = table.concat(versionData):gsub("%s+", "")
-
-    sampAddChatMessage("[DT] online: "..new_version, -1)
-    sampAddChatMessage("[DT] local: "..SCRIPT_VERSION, -1)
-
-    if new_version ~= SCRIPT_VERSION then
-        sampAddChatMessage("[DT] Íàéäåíà îáíîâà!", 0x00FF00)
-        updateScript()
-    else
-        sampAddChatMessage("[DT] Îáíîâëåíèå íå òðåáóåòñÿ", -1)
-    end
-end
-
-function updateScript()
-    sampAddChatMessage("[DT] Ñêà÷èâàíèå îáíîâû...", -1)
-
-    local script_path = thisScript().path
-    local data = {}
-
-    local _, code = http.request{
-        url = UPDATE_URL,
-        sink = ltn12.sink.table(data)
-    }
-
-    if code ~= 200 then
-        sampAddChatMessage("[DT] HTTP îøèáêà: "..tostring(code), -1)
-        return
-    end
-
-    local content = table.concat(data)
-
-    local file = io.open(script_path, "wb")
-    if not file then
-        sampAddChatMessage("[DT] Íå óäàëîñü ñîçäàòü ôàéë", -1)
-        return
-    end
-
-    file:write(content)
-    file:close()
-
-    sampAddChatMessage("[DT] Îáíîâëåíî! Ïåðåçàãðóçêà...", 0x00FF00)
-
-    wait(500)
-    thisScript():reload()
-end
-
--- ================= ÒÂÎÉ ÊÎÄ =================
 
 local allowedTextDraws = {
     [2110] = true,
@@ -80,13 +9,16 @@ local allowedTextDraws = {
 }
 
 local zones = zones or {
-    -- (îñòàâèë êàê ó òåáÿ, íå òðîãàë)
+    {"Idlewood", 1812.6, -1852.8, 0.0, 1971.6, -1742.3, 0.0},
+    {"Ganton", 2222.5, -1852.8, 0.0, 2632.8, -1722.3, 0.0},
+    {"Jefferson", 1996.9, -1449.6, 0.0, 2222.5, -1350.7, 0.0},
+    {"East Los Santos", 2222.5, -1628.5, 0.0, 2421.0, -1494.0, 0.0}
 }
 
 local renderFont = renderCreateFont("Arial", 10, 5)
 
-local targetZone = "Íåò öåëè"
-local targetName = "Íåèçâåñòíî"
+local targetZone = "Нет цели"
+local targetName = "Неизвестно"
 local targetId = "?"
 
 local waypointX, waypointY = nil, nil
@@ -104,13 +36,7 @@ end
 function main()
     repeat wait(0) until isSampAvailable()
 
-    sampAddChatMessage("[HUD] Ñêðèïò çàïóùåí.", 0x00FF00)
-
-    -- ?? çàïóñê àâòîîáíîâû
-    lua_thread.create(function()
-        wait(3000)
-        checkUpdate()
-    end)
+    sampAddChatMessage("[HUD] Скрипт запущен.", 0x00FF00)
 
     while true do
         wait(0)
@@ -122,14 +48,14 @@ function main()
             local dist = getDistance(px, py, waypointX, waypointY)
 
             text = string.format(
-                "Öåëü: %s [%s]\nÐàéîí: %s\nÄèñòàíöèÿ: %.0f ì",
+                "Цель: %s [%s]\nРайон: %s\nДистанция: %.0f м",
                 targetName,
                 targetId,
                 targetZone,
                 dist
             )
         else
-            text = "Öåëü íå óñòàíîâëåíà"
+            text = "Цель не установлена"
         end
 
         renderFontDrawText(renderFont, text, 20, 300, 0xFFFFFFFF)
@@ -150,7 +76,7 @@ local function processText(id, text)
                 targetId = playerId
 
                 sampAddChatMessage(
-                    "[HUD] Íàéäåíà öåëü: " .. targetName .. " [" .. targetId .. "]",
+                    "[HUD] Найдена цель: " .. targetName .. " [" .. targetId .. "]",
                     0x00FF00
                 )
             end
@@ -171,7 +97,7 @@ local function processText(id, text)
 
                     placeWaypoint(x, y)
 
-                    sampAddChatMessage("[HUD] Ðàéîí öåëè: " .. name, 0x00FF00)
+                    sampAddChatMessage("[HUD] Район цели: " .. name, 0x00FF00)
                     return
                 end
 
